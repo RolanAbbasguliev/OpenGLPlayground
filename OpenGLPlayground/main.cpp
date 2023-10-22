@@ -37,6 +37,13 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "   FragColor = vec4(1.0f, 0.0f, 0.2f, 1.0f);\n"
 "}\n\0";
 
+const char* fragmetShaderYellowSource = "#version 330 core\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"   FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
+"}\n\0";
+
  
 
 int main()
@@ -92,9 +99,36 @@ int main()
 
 	if (!success)
 	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
+
+	// handle yellow fragment shader
+	unsigned int fragmentYellowShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentYellowShader, 1, &fragmetShaderYellowSource, NULL);
+	glCompileShader(fragmentYellowShader);
+
+	glGetShaderiv(fragmentYellowShader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(fragmentYellowShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::FRAGMENT::YELLOW::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
+	unsigned int shaderProgramYellow = glCreateProgram();
+	glAttachShader(shaderProgramYellow, vertexShader);
+	glAttachShader(shaderProgramYellow, fragmentYellowShader);
+	glLinkProgram(shaderProgramYellow);
+
+
+	glGetProgramiv(shaderProgramYellow, GL_LINK_STATUS, &success);
+
+	if (!success)
+	{
+		glGetProgramInfoLog(shaderProgramYellow, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAMM::YELLOW::LINK_FAILED\n" << infoLog << std::endl;
+	}
+
 	unsigned int shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
@@ -196,6 +230,8 @@ int main()
 
 		glBindVertexArray(VAOs[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glUseProgram(shaderProgramYellow);
 
 		glBindVertexArray(VAOs[1]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
