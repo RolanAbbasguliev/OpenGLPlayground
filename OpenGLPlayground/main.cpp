@@ -113,10 +113,15 @@ int main()
 
 	//set vertex data
 	float vertices[] = {
-		0.5f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f
+		//first triangle
+		-1.0f, 1.0f, 0.0f, //left top
+		-1.0f, 0.0f, 0.0f, //left bottom
+		0.0f, 0.0f, 0.0f, //right bottom
+
+		//second triangle
+		0.0f, 1.0f, 0.0f, //left top
+		0.0f, 0.0f, 0.0f, //left bottom
+		1.0f, 0.0f, 0.0f, //right bottom
 	};	
 
 	//float verticesSquare[] = {
@@ -164,8 +169,8 @@ int main()
 
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		// glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
